@@ -1,0 +1,53 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "abacusConfigMigrations.fullname" . }}
+  labels:
+    {{- include "abacusConfigMigrations.labels" . | nindent 4 }}
+spec:
+  template:
+    metadata:
+      {{- with .Values.abacusConfigMigrations.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "abacusConfigMigrations.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "abacusConfigMigrations.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.abacusConfigMigrations.podSecurityContext | nindent 8 }}
+      
+      restartPolicy: Never
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.abacusConfigMigrations.image.repository }}:{{ or .Values.image.tag .Values.abacusConfigMigrations.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.abacusConfigMigrations.image.pullPolicy }}
+          {{- if .Values.abacusConfigMigrations.env }}
+          env:
+          {{- toYaml . | nindent 8 }}
+          {{- end }}
+          {{- with .Values.abacusConfigMigrations.envFrom }}
+          envFrom: 
+          {{- toYaml . | nindent 8 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
