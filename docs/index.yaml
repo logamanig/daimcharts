@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  abacus:
+  - apiVersion: v2
+    appVersion: 2.1.0.133
+    created: "2021-10-19T20:49:14.1997134+08:00"
+    description: Helm chart to deploy Abacus, AbacusConfig restservices with Abacus Portal. AbacusConfigMigrations is configured to run as one-off kubernetes job.
+    digest: c01dee1c1ea50528bd222c122e68803c07a5e82c1901f4ba747063f948c55923
+    name: abacus
+    type: application
+    urls:
+    - https://pages.git.daimler.com/dfsaap/dsc.infiniteapi/abacus-2.1.0.tgz
+    version: 2.1.0
+generated: "2021-10-19T20:49:14.1977106+08:00"
